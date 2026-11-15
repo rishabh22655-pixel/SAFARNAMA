@@ -8,7 +8,6 @@ import { computeMinimalSettlements } from './settlement';
 import {
   getGeminiModel,
   isGeminiConfigured,
-  saveApiKeyToEnv,
   ReplanResponseSchema,
   GroupItinerarySchema,
   CheaperAlternativesSchema,
@@ -35,25 +34,6 @@ app.get('/api/health', (req, res) => {
     geminiConfigured: isGeminiConfigured(),
     timestamp: new Date().toISOString()
   });
-});
-
-// Save Gemini API Key endpoint
-app.post('/api/settings/save-gemini-key', (req, res) => {
-  try {
-    const { apiKey } = req.body;
-    if (!apiKey || typeof apiKey !== 'string' || apiKey.trim().length < 5) {
-      return res.status(400).json({ error: 'Valid Gemini API key string is required' });
-    }
-    saveApiKeyToEnv(apiKey);
-    console.log('[Safarnama] GEMINI_API_KEY updated successfully in .env and memory.');
-    res.json({
-      success: true,
-      message: 'Gemini API key configured and activated live!',
-      geminiConfigured: true
-    });
-  } catch (error: any) {
-    res.status(500).json({ error: 'Failed to persist API key: ' + error.message });
-  }
 });
 
 // B1: Check Disruptions (Open-Meteo LIVE Weather)
@@ -135,7 +115,7 @@ app.post('/api/replan', async (req, res) => {
     } = req.body;
 
     let validated: any;
-    let engineSource = 'Gemini 1.5 Flash (LIVE)';
+    let engineSource = 'Gemini 3.8 Flash (LIVE)';
 
     if (isGeminiConfigured()) {
       try {
@@ -220,7 +200,7 @@ app.post('/api/group/generate-itinerary', async (req, res) => {
   try {
     const { preferences, destinations, departureWindows } = req.body;
     let validated: any;
-    let engineSource = 'Gemini 1.5 Flash (LIVE)';
+    let engineSource = 'Gemini 3.8 Flash (LIVE)';
 
     if (isGeminiConfigured()) {
       try {
@@ -292,7 +272,7 @@ app.post('/api/budget/cheaper-alternatives', async (req, res) => {
   try {
     const { items, budget, categoriesBreakdown } = req.body;
     let validated: any;
-    let engineSource = 'Gemini 1.5 Flash (LIVE)';
+    let engineSource = 'Gemini 3.8 Flash (LIVE)';
 
     if (isGeminiConfigured()) {
       try {

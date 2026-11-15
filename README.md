@@ -9,7 +9,7 @@ Cinematic, travel-film aesthetic web application built for boutique travel start
 - **Frontend**: React 18, Vite, TypeScript, Tailwind CSS, Lucide React, React Router v6.
 - **Maps & Routing**: Leaflet, OpenStreetMap, CartoDB Dark Matter, and Open Source Routing Machine (OSRM).
 - **Weather Surveillance**: Open-Meteo Live Meteorology API (no API key required).
-- **AI Core**: Google Gemini API (`gemini-1.5-flash`), strictly called **server-side only** with Zod schema validation. Never exposes API keys to client browsers.
+- **AI Core**: Google Gemini API (`gemini-3.8-flash`), strictly called **server-side only** with Zod schema validation. Never exposes API keys to client browsers.
 - **Database & Sync**: Supabase (Postgres, Auth, Realtime, Row-Level Security) with offline-first localStorage support.
 
 ---
@@ -96,3 +96,14 @@ The included `render.yaml` configures one Node web service to build the Vite fro
 4. Open the public `onrender.com` URL shown for the service.
 
 The free Render plan may spin down after inactivity. Upgrade the service plan if it needs to stay warm continuously.
+
+## Deploy an Always-Available Site to Cloudflare Pages
+
+Cloudflare Pages can serve the built frontend without an idle web server. Its Pages Function forwards `/api/*` requests to the existing Render API, so the website remains accessible but API requests can be delayed while Render's free service wakes up. Free-plan limits and availability are subject to change and are not a lifetime guarantee.
+
+1. In Cloudflare, choose **Workers & Pages → Create → Pages → Connect to Git**, authorize GitHub, and select `rishabh22655-pixel/SAFARNAMA` on the `main` branch.
+2. Set the build command to `npm ci --include=dev && npm run build` and the build output directory to `dist`.
+3. If using Supabase, add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` as Cloudflare Pages build environment variables.
+4. For AI features, create a Gemini API key in Google AI Studio and add it as `GEMINI_API_KEY` in the Render service's environment settings. Never put this key in the repository or a `VITE_` variable.
+
+The app uses Gemini 3.8 Flash when `GEMINI_API_KEY` is configured and falls back to its built-in algorithms otherwise. Google's free tier has quotas and its terms say free-tier content may be used to improve Google products; avoid sending sensitive trip information.

@@ -1,8 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { z } from 'zod';
 import dotenv from 'dotenv';
-import fs from 'fs';
-import path from 'path';
 
 dotenv.config();
 
@@ -13,23 +11,6 @@ export const isGeminiConfigured = () => {
   return Boolean(key && key.trim().length > 10 && !key.includes('your_gemini_api_key'));
 };
 
-export const saveApiKeyToEnv = (key: string) => {
-  process.env.GEMINI_API_KEY = key.trim();
-  const envPath = path.resolve(process.cwd(), '.env');
-  let content = '';
-  if (fs.existsSync(envPath)) {
-    content = fs.readFileSync(envPath, 'utf8');
-    if (content.includes('GEMINI_API_KEY=')) {
-      content = content.replace(/GEMINI_API_KEY=.*/g, `GEMINI_API_KEY=${key.trim()}`);
-    } else {
-      content += `\nGEMINI_API_KEY=${key.trim()}\n`;
-    }
-  } else {
-    content = `PORT=3001\nGEMINI_API_KEY=${key.trim()}\n`;
-  }
-  fs.writeFileSync(envPath, content, 'utf8');
-};
-
 export const getGeminiModel = (systemInstruction?: string) => {
   const key = getApiKey();
   if (!isGeminiConfigured()) {
@@ -37,7 +18,7 @@ export const getGeminiModel = (systemInstruction?: string) => {
   }
   const genAI = new GoogleGenerativeAI(key);
   return genAI.getGenerativeModel({
-    model: 'gemini-1.5-flash',
+    model: 'gemini-3.8-flash',
     systemInstruction,
     generationConfig: {
       responseMimeType: 'application/json',
