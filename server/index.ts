@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'node:path';
 import { fetchLiveWeather } from './weather';
 import { calculateRoute } from './routing';
 import { computeMinimalSettlements } from './settlement';
@@ -20,7 +21,8 @@ import {
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = Number(process.env.PORT) || 3001;
+const distDirectory = path.resolve(process.cwd(), 'dist');
 
 app.use(cors());
 app.use(express.json());
@@ -418,6 +420,14 @@ app.post('/api/routing/calculate', async (req, res) => {
   } catch (e: any) {
     res.status(500).json({ error: e.message });
   }
+});
+
+app.use(express.static(distDirectory));
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api/')) {
+    return next();
+  }
+  res.sendFile(path.join(distDirectory, 'index.html'));
 });
 
 app.listen(PORT, '0.0.0.0', () => {

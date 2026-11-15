@@ -85,3 +85,14 @@ To run with a live Supabase project:
 2. Run `supabase/migrations/20261114000000_init_safarnama_schema.sql` in the Supabase SQL Editor.
 3. Run `supabase/seed.sql` to populate destinations, windows, and activities.
 4. Add your `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` to `.env`.
+
+## Deploy to Render
+
+The included `render.yaml` configures one Node web service to build the Vite frontend and serve it alongside the Express API.
+
+1. In Render, choose **New → Blueprint**, connect `rishabh22655-pixel/SAFARNAMA`, and deploy the `main` branch.
+2. Render builds with `npm ci --include=dev && npm run build`, starts with `npm run server`, and checks `/api/health`.
+3. In the service's environment settings, add `GEMINI_API_KEY` for live AI features. For Supabase sync, also add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`; these must be set before the frontend build.
+4. Open the public `onrender.com` URL shown for the service.
+
+The free Render plan may spin down after inactivity. Upgrade the service plan if it needs to stay warm continuously.
