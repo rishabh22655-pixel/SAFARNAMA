@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 12 10 9;
+    --foreground: 237 229 219;
+  }
+
+  body {
+    background-color: #0C0A09;
+    color: #EDE5DB;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, .font-serif {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Custom scrollbar for dark aesthetic */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0C0A09;
+}
+::-webkit-scrollbar-thumb {
+  background: #26231E;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3A352E;
+}
+
+/* Leaflet dark theme styling */
+.leaflet-container {
+  background: #141210 !important;
+  font-family: inherit;
+}
+.leaflet-popup-content-wrapper {
+  background: #181512 !important;
+  color: #EDE5DB !important;
+  border: 1px solid #3A352E !important;
+  border-radius: 8px !important;
+}
+.leaflet-popup-tip {
+  background: #181512 !important;
+}
+
+/* Subtle image film grain or vignette */
+.vignette-hero {
+  background: radial-gradient(circle at center, transparent 40%, rgba(12, 10, 9, 0.8) 95%);
+}
